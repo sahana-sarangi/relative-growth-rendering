@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Year To Year Relative Growth Map</title>
+    <meta charset="UTF-8">
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f5; 
+        }
+        
+        
+        .container {
+            max-width: 1400px; 
+            margin: 40px auto; 
+            padding: 0;
+        }
+        
+        
+        .header-bar {
+            background-color: #6a5acd; 
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .header-bar h1 {
+            margin: 0;
+            font-size: 2.2em;
+        }
+        .header-bar p {
+            margin: 5px 0 0 0;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* Controls Area (Dropdowns and Slider) */
+        .controls-area {
+            background-color: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #ddd;
+            display: flex; 
+            align-items: center;
+            border-top: 1px solid #ddd;
+        }
+        .controls-area label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+        .controls-area select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 30px;
+        }
+
+        
+        .vis-area {
+            background-color: white;
+            padding: 30px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            min-height: 1100px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+    </style>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header-bar">
+            <h1>Year To Year Relative Growth Map</h1>
+            <p>2D visualization of topic growth based on t-SNE coordinates</p>
+        </div>
+
+        <div class="controls-area">
+            <label>Filter Topic:</label>
+            <div id="filter-controls"></div>
+        </div>
+        
+        <div class="vis-area">
+            <div id="vis"></div>
+            </div>
+    </div>
+    
+    </body>
+</html>

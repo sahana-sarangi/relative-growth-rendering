@@ -45,11 +45,9 @@
         .controls-area {
             background-color: white;
             padding: 20px 30px;
-            /* Removed border-bottom here, added it back to the new parent container if needed */
             display: flex; 
             align-items: center; 
             gap: 20px; 
-            /* Added padding-top and border-bottom for visual separation */
             padding-top: 10px;
             border-bottom: 1px solid #ddd; 
         }
@@ -108,16 +106,17 @@
         /* Visualization Area */
         .vis-area {
             background-color: white;
-            padding: 0; /* Changed padding to 0, since controls-area and #vis will handle their own spacing now */
+            padding: 0;
             min-height: 1100px; 
+            text-align: center; /* CRITICAL: Centers the chart block within this area */
         }
         
         /* Chart placeholder container */
         #vis {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 30px; /* Added padding back to the chart area */
+            /* CRITICAL: Changed from 'flex' to 'block' to force vertical flow */
+            display: block; 
+            padding: 30px; 
+            margin: 0 auto;
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
@@ -133,7 +132,7 @@
         </div>
 
         <div class="vis-area">
-            <!-- DROPDOWN MOVED HERE -->
+            <!-- DROPDOWN IS IN THE CONTROLS AREA -->
             <div class="controls-area">
                 <!-- Manually placed label text -->
                 <span class="filter-label">Filter Topic:</span>
@@ -142,7 +141,7 @@
                 <div id="filter-controls"></div>
             </div>
             
-            <!-- Chart placeholder -->
+            <!-- Chart placeholder - will be forced onto the next line -->
             <div id="vis"></div>
             <!-- Zoom/Pan controls will appear here automatically -->
         </div>

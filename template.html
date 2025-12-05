@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,9 +46,11 @@
         .controls-area {
             background-color: white;
             padding: 20px 30px;
+            /* Removed border-bottom here, added it back to the new parent container if needed */
             display: flex; 
             align-items: center; 
             gap: 20px; 
+            /* Added padding-top and border-bottom for visual separation */
             padding-top: 10px;
             border-bottom: 1px solid #ddd; 
         }
@@ -60,8 +63,29 @@
             font-size: 1.1em;
         }
 
-        /* Styling for the manual select element */
-        #topic-select {
+        /* CRITICAL LAYOUT FIX OVERRIDE for Altair dropdown */
+        
+        #filter-controls {
+            display: inline-flex !important;
+            align-items: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        #filter-controls > div,
+        #filter-controls > form,
+        #filter-controls > form > div {
+            display: inline-flex !important; 
+            align-items: center !important;
+            margin: 0 !important; 
+            padding: 0 !important; 
+        }
+        
+        #filter-controls label {
+            display: none !important;
+        }
+
+        #filter-controls select {
             padding: 10px 15px;
             border: 2px solid #bdc3c7; 
             border-radius: 8px; 
@@ -69,38 +93,32 @@
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            outline: none;
         }
         
-        #topic-select:hover {
+        #filter-controls select:hover {
             border-color: #95a5a6;
         }
         
-        #topic-select:focus {
+        #filter-controls select:focus {
             border-color: #6a5acd; 
             box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+            outline: none;
         }
 
-        /* Visualization Area: Use Flexbox Column for strict vertical flow */
+
+        /* Visualization Area */
         .vis-area {
             background-color: white;
-            padding: 0;
+            padding: 0; /* Changed padding to 0, since controls-area and #vis will handle their own spacing now */
             min-height: 1100px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
         }
         
         /* Chart placeholder container */
         #vis {
-            display: block; 
-            padding: 30px; 
-            margin: 0;
-        }
-        
-        /* Cleanup for old filter controls */
-        #filter-controls {
-            display: none !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px; /* Added padding back to the chart area */
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
@@ -116,22 +134,18 @@
         </div>
 
         <div class="vis-area">
-            <!-- MANUAL DROPDOWN PLACED HERE -->
+            <!-- DROPDOWN MOVED HERE -->
             <div class="controls-area">
                 <!-- Manually placed label text -->
                 <span class="filter-label">Filter Topic:</span>
                 
-                <!-- NEW MANUAL SELECT ELEMENT -->
-                <select id="topic-select">
-                    <!-- Options will be dynamically populated by Python/JS -->
-                </select>
-                
-                <!-- The original placeholder is still needed but hidden, as vega-embed may look for it -->
-                <div id="filter-controls"></div> 
+                <!-- Altair/Vega-Embed injects the dropdown control here -->
+                <div id="filter-controls"></div>
             </div>
             
-            <!-- The chart placeholder -->
+            <!-- Chart placeholder -->
             <div id="vis"></div>
+            <!-- Zoom/Pan controls will appear here automatically -->
         </div>
     </div>
     

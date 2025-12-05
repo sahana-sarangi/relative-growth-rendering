@@ -32,7 +32,7 @@ purple_max = purple_center + purple_range / 2
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
     # Range is Deep Cyan (low), Deep Brown (neutral low), Deep Brown (neutral high), Red (high)
-    range=["#008B8B", "#5C4033", "#5C4033", "#FF0000"]
+    range=["#004e98", "#5C4033", "#5C4033", "#FF0000"]
 )
 
 # ===================================================================

@@ -7,9 +7,9 @@ import io
 # 1. CONFIGURATION & DATA SOURCE
 # ===================================================================
 
-# Using the direct LFS media URL. The "raw.githubusercontent.com" domain only serves
+# UPDATED: Switching to the direct LFS media URL. The "raw.githubusercontent.com" domain only serves
 # the small pointer file for LFS content, causing the 'TopicName' error.
-# We are switching to the media domain which serves the actual large file.
+# The media domain serves the actual large file content, which should fix the data loading issue.
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/main/final_combined_data.csv" 
 
 # --- Data Loading and Topic Extraction (ONLY for the Dropdown) ---
@@ -24,7 +24,7 @@ try:
         if data_response.empty:
             raise Exception("DataFrame loaded is empty. Check URL accessibility or file content.")
         
-        # This will show the LFS pointer content if the URL is still incorrect
+        # This check catches the LFS pointer file error.
         print(f"Error: 'TopicName' column not found. Available columns: {data_response.columns.tolist()}")
         raise KeyError("'TopicName' not found after loading.")
     
@@ -33,6 +33,7 @@ try:
     MY_TOPIC_OPTIONS = ['All Topics'] + sorted(unique_topics)
     
     # We are NOT embedding the data to keep the file size below 100MB.
+    print("SUCCESS: Topic list loaded correctly from CSV.")
 
 except Exception as e:
     # Fallback in case of data loading error
@@ -193,3 +194,4 @@ else:
 
 with open("index.html", 'w') as f:
     f.write(final_html)
+    print("SUCCESS: index.html generated with small file size.")

@@ -5,7 +5,6 @@ import io
 
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
 
-# --- Dynamic Topic Extraction ---
 try:
     data_response = pd.read_csv(PUBLIC_DATA_URL)
     unique_topics = data_response['TopicName'].unique().tolist()
@@ -13,44 +12,32 @@ try:
 except Exception:
     MY_TOPIC_OPTIONS = ['All Topics', 'Data Load Error'] 
     
-# --- Scale Definitions (max_growth updated) ---
 min_tsne_x = -90.0  
 max_tsne_x = 90.0  
 min_tsne_y = -90.0  
 max_tsne_y = 90.0  
-max_growth = 0.4    # CHANGED from 0.6 to 0.4 (40%) as requested
+max_growth = 0.4   
 
 purple_center = 0.05
 purple_range = 0.02
 purple_min = purple_center - purple_range / 2
 purple_max = purple_center + purple_range / 2
 
-# CRITICAL UPDATE: 
-# Changed to a colorblind-friendly, high-luminosity contrast palette (Blue-Yellow-Red).
-# This is a highly accessible diverging scheme that prevents pink/purple interpolation.
-# Hex codes used: Deep Blue (#4575B4), Bright Neutral Yellow (#FFFFBF), Strong Red (#D73027).
+
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
-    # Range is Deep Blue (low), Bright Neutral (center low), Bright Neutral (center high), Strong Red (high)
     range=["#4575B4", "#FFFFBF", "#FFFFBF", "#D73027"]
 )
 
-# ===================================================================
-# 2. SELECTION (DROPDOWN MENU)
-# ===================================================================
 
 topic_selection = alt.selection_point(
     fields=['TopicName'], 
     bind=alt.binding_select(
-        # CRITICAL CHANGE: name property removed 
         options=MY_TOPIC_OPTIONS 
     ), 
     empty='all' 
 )
 
-# ===================================================================
-# 3. CHART DEFINITION (Unchanged)
-# ===================================================================
 
 base = alt.Chart(alt.Data(url=PUBLIC_DATA_URL)).properties(
     title=" " 
@@ -100,9 +87,6 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
     fontSize=18, anchor="start"
 )
 
-# ===================================================================
-# 4. GENERATE AND INJECT HTML (Unchanged)
-# ===================================================================
 
 chart_json = final_chart.to_json()
 

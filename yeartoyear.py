@@ -30,11 +30,12 @@ purple_range = 0.02
 purple_min = purple_center - purple_range / 2
 purple_max = purple_center + purple_range / 2
 
+# === MODIFIED COLOR SCALE (Blue-Tan-Orange for Accessibility) ===
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
-    range=["#373da9", "#7f5539", "#dc2f02"]
+    # Range: Blue (low/negative) -> Tan (near 0) -> Orange (high/positive)
+    range=["#3b5998", "#e0cfa9", "#ff6600"] 
 )
-
 # ===================================================================
 # 2. SELECTION (DROPDOWN MENU)
 # ===================================================================
@@ -109,7 +110,7 @@ chart_json = final_chart.to_json()
 with open("template.html", 'r') as f:
     html_template = f.read()
 
-PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
+PLACEHOLDER = ""
 
 final_html = html_template.replace(
     PLACEHOLDER, 

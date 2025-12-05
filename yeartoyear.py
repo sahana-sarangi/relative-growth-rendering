@@ -1,14 +1,31 @@
+
 import altair as alt
 import json 
+import pandas as pd
+import io 
 
-# ===================================================================
-# 1. CONFIGURATION & DATA SOURCE
-# ===================================================================
-
-# !!! 1. CRITICAL: Replace this with your working GitHub RAW link (e.g., https://raw.githubusercontent.com/...) !!!
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
 
-# --- Scale Definitions ---
+# --- Dynamic Topic Extraction ---
+try:
+    # Read the data directly from the public URL into a pandas DataFrame
+    # Note: Altair will read the data again in the chart definition, this is just for the dropdown list.
+    data_response = pd.read_csv(PUBLIC_DATA_URL)
+    
+    # Extract unique topic names from the 'TopicName' column
+    unique_topics = data_response['TopicName'].unique().tolist()
+    
+    # Create the final options list, starting with 'All Topics' and sorting the rest
+    MY_TOPIC_OPTIONS = ['All Topics'] + sorted(unique_topics)
+
+    # Note: If this prints an error when you run the script, check your PUBLIC_DATA_URL again.
+
+except Exception as e:
+    # Fallback to a static list if reading the URL fails (e.g., pandas not installed, or URL blocked)
+    print(f"Error loading data from URL for topic extraction: {e}. Using fallback list.")
+    MY_TOPIC_OPTIONS = ['All Topics', 'Error: Data Load Failed', 'Check Python/Pandas'] 
+    
+# --- Scale Definitions (Unchanged) ---
 min_tsne_x = -90.0  
 max_tsne_x = 90.0  
 min_tsne_y = -90.0  
@@ -29,9 +46,7 @@ color_scale = alt.Scale(
 # 2. SELECTION (DROPDOWN MENU)
 # ===================================================================
 
-# !!! 2. CRITICAL: Replace this list with your actual unique topic names !!!
-MY_TOPIC_OPTIONS = ['All Topics', 'Topic 1', 'Topic 2', 'Topic 3', 'Topic 4', 'Topic 5'] 
-
+# This list is now populated dynamically from the data
 topic_selection = alt.selection_point(
     fields=['TopicName'], 
     bind=alt.binding_select(
@@ -42,16 +57,15 @@ topic_selection = alt.selection_point(
 )
 
 # ===================================================================
-# 3. CHART DEFINITION
+# 3. CHART DEFINITION (Unchanged)
 # ===================================================================
 
 base = alt.Chart(alt.Data(url=PUBLIC_DATA_URL)).properties(
     title=" " 
-).interactive() # Enables Zoom and Pan
+).interactive()
 
 final_chart = base.mark_circle(size=25, opacity=0.9).encode(
     
-    # Filter opacity controlled by the dropdown selection
     opacity=alt.condition(topic_selection, alt.value(0.9), alt.value(0.1)),
     
     x=alt.X(
@@ -95,26 +109,21 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
 )
 
 # ===================================================================
-# 4. GENERATE AND INJECT HTML
+# 4. GENERATE AND INJECT HTML (Unchanged)
 # ===================================================================
 
-# Dump chart JSON string safely
 chart_json = final_chart.to_json()
 
-# Read the custom HTML template file
 with open("template.html", 'r') as f:
     html_template = f.read()
 
-# Placeholder string in template.html
 PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
 
-# Inject the chart JSON into the template's placeholder script block
 final_html = html_template.replace(
     PLACEHOLDER, 
     f"""
     <script>
       var spec = {chart_json};
-      // Embed the spec into the #vis div. Controls go into #filter-controls.
       vegaEmbed('#vis', spec, {{
         actions: false, 
         mode: 'vega-lite',
@@ -124,6 +133,5 @@ final_html = html_template.replace(
     """
 )
 
-# Write the final index.html file
 with open("index.html", 'w') as f:
     f.write(final_html)

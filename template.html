@@ -103,20 +103,22 @@
         }
 
 
-        /* Visualization Area */
+        /* Visualization Area: Use Flexbox Column for strict vertical flow */
         .vis-area {
             background-color: white;
             padding: 0;
             min-height: 1100px; 
-            text-align: center; /* CRITICAL: Centers the chart block within this area */
+            display: flex; /* CRITICAL: Enable Flexbox */
+            flex-direction: column; /* CRITICAL: Stack children vertically */
+            align-items: center; /* Center children horizontally */
         }
         
         /* Chart placeholder container */
         #vis {
-            /* CRITICAL: Changed from 'flex' to 'block' to force vertical flow */
+            /* Now handled by the parent's align-items: center; */
             display: block; 
             padding: 30px; 
-            margin: 0 auto;
+            margin: 0;
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
@@ -132,7 +134,7 @@
         </div>
 
         <div class="vis-area">
-            <!-- DROPDOWN IS IN THE CONTROLS AREA -->
+            <!-- The controls-area must be the first child to be at the top -->
             <div class="controls-area">
                 <!-- Manually placed label text -->
                 <span class="filter-label">Filter Topic:</span>
@@ -141,7 +143,7 @@
                 <div id="filter-controls"></div>
             </div>
             
-            <!-- Chart placeholder - will be forced onto the next line -->
+            <!-- The chart placeholder must be the second child -->
             <div id="vis"></div>
             <!-- Zoom/Pan controls will appear here automatically -->
         </div>

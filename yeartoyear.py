@@ -59,7 +59,7 @@ final_chart = (
             alt.Tooltip("Year:Q", title="Year")
         ],
     )
-    .properties(title="Year To Year Relative Growth - t-SNE Map", width=700, height=1000)
+    .properties(title="Year To Year Relative Growth - t-SNE Map", width=1000, height=1000)
     .configure_title(fontSize=18, anchor="start")
     .configure_axis(labelFontSize=12, titleFontSize=14, grid=True)
     .configure_view(strokeWidth=0)

@@ -1,6 +1,6 @@
 import altair as alt
 
-PUBLIC_DATA_URL = "https://www.dropbox.com/scl/fi/gynl2pd6wpt5g9eift2s6/final_combined_data.csv?rlkey=v9rkbqc0bjc90fvcfso8m5ta4&st=mcfqrem2&dl=1"
+PUBLIC_DATA_URL = "./final_combined_data.csv"
 
 min_tsne_x = -15.0  # Placeholder 
 max_tsne_x = 15.0   # Placeholder

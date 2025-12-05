@@ -60,29 +60,8 @@
             font-size: 1.1em;
         }
 
-        /* CRITICAL LAYOUT FIX OVERRIDE for Altair dropdown */
-        
-        #filter-controls {
-            display: inline-flex !important;
-            align-items: center !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        
-        #filter-controls > div,
-        #filter-controls > form,
-        #filter-controls > form > div {
-            display: inline-flex !important; 
-            align-items: center !important;
-            margin: 0 !important; 
-            padding: 0 !important; 
-        }
-        
-        #filter-controls label {
-            display: none !important;
-        }
-
-        #filter-controls select {
+        /* Styling for the manual select element */
+        #topic-select {
             padding: 10px 15px;
             border: 2px solid #bdc3c7; 
             border-radius: 8px; 
@@ -90,35 +69,38 @@
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            outline: none;
         }
         
-        #filter-controls select:hover {
+        #topic-select:hover {
             border-color: #95a5a6;
         }
         
-        #filter-controls select:focus {
+        #topic-select:focus {
             border-color: #6a5acd; 
             box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
-            outline: none;
         }
-
 
         /* Visualization Area: Use Flexbox Column for strict vertical flow */
         .vis-area {
             background-color: white;
             padding: 0;
             min-height: 1100px; 
-            display: flex; /* CRITICAL: Enable Flexbox */
-            flex-direction: column; /* CRITICAL: Stack children vertically */
-            align-items: center; /* Center children horizontally */
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
         }
         
         /* Chart placeholder container */
         #vis {
-            /* Now handled by the parent's align-items: center; */
             display: block; 
             padding: 30px; 
             margin: 0;
+        }
+        
+        /* Cleanup for old filter controls */
+        #filter-controls {
+            display: none !important;
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
@@ -134,18 +116,22 @@
         </div>
 
         <div class="vis-area">
-            <!-- The controls-area must be the first child to be at the top -->
+            <!-- MANUAL DROPDOWN PLACED HERE -->
             <div class="controls-area">
                 <!-- Manually placed label text -->
                 <span class="filter-label">Filter Topic:</span>
                 
-                <!-- Altair/Vega-Embed injects the dropdown control here -->
-                <div id="filter-controls"></div>
+                <!-- NEW MANUAL SELECT ELEMENT -->
+                <select id="topic-select">
+                    <!-- Options will be dynamically populated by Python/JS -->
+                </select>
+                
+                <!-- The original placeholder is still needed but hidden, as vega-embed may look for it -->
+                <div id="filter-controls"></div> 
             </div>
             
-            <!-- The chart placeholder must be the second child -->
+            <!-- The chart placeholder -->
             <div id="vis"></div>
-            <!-- Zoom/Pan controls will appear here automatically -->
         </div>
     </div>
     

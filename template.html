@@ -4,24 +4,24 @@
     <title>Year To Year Relative Growth Map</title>
     <meta charset="UTF-8">
     <style>
-        
+        /* General Body and Background Styling */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f5; 
+            background-color: #f0f0f5; /* Very light, soft background */
         }
         
-        
+        /* Main Container for the entire application */
         .container {
-            max-width: 1400px; 
-            margin: 40px auto; 
+            max-width: 1400px; /* Wide container for the 1000px chart */
+            margin: 40px auto; /* Centers the container */
             padding: 0;
         }
         
-        
+        /* Header Bar Styling (For the "Paper Similarity Map" banner look) */
         .header-bar {
-            background-color: #6a5acd; 
+            background-color: #6a5acd; /* Purple color for the header */
             color: white;
             padding: 20px 0;
             text-align: center;
@@ -43,7 +43,7 @@
             background-color: white;
             padding: 20px 30px;
             border-bottom: 1px solid #ddd;
-            display: flex; 
+            display: flex; /* Enables alignment of the dropdown */
             align-items: center;
             border-top: 1px solid #ddd;
         }
@@ -59,16 +59,17 @@
             margin-right: 30px;
         }
 
-        
+        /* Visualization Area */
         .vis-area {
             background-color: white;
             padding: 30px;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
-            min-height: 1100px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            min-height: 1100px; /* Ensure space for the large chart */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Subtle shadow */
         }
     </style>
+    <!-- Vega/Vega-Lite Dependencies -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
@@ -82,13 +83,17 @@
 
         <div class="controls-area">
             <label>Filter Topic:</label>
+            <!-- Dropdown placeholder -->
             <div id="filter-controls"></div>
         </div>
         
         <div class="vis-area">
+            <!-- Chart placeholder -->
             <div id="vis"></div>
-            </div>
+            <!-- Zoom/Pan controls will appear here automatically -->
+        </div>
     </div>
     
-    </body>
+    <!-- Chart embedding script will be added here -->
+</body>
 </html>

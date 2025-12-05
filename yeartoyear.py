@@ -8,22 +8,11 @@ PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/rela
 
 # --- Dynamic Topic Extraction ---
 try:
-    # Read the data directly from the public URL into a pandas DataFrame
-    # Note: Altair will read the data again in the chart definition, this is just for the dropdown list.
     data_response = pd.read_csv(PUBLIC_DATA_URL)
-    
-    # Extract unique topic names from the 'TopicName' column
     unique_topics = data_response['TopicName'].unique().tolist()
-    
-    # Create the final options list, starting with 'All Topics' and sorting the rest
     MY_TOPIC_OPTIONS = ['All Topics'] + sorted(unique_topics)
-
-    # Note: If this prints an error when you run the script, check your PUBLIC_DATA_URL again.
-
-except Exception as e:
-    # Fallback to a static list if reading the URL fails (e.g., pandas not installed, or URL blocked)
-    print(f"Error loading data from URL for topic extraction: {e}. Using fallback list.")
-    MY_TOPIC_OPTIONS = ['All Topics', 'Error: Data Load Failed', 'Check Python/Pandas'] 
+except Exception:
+    MY_TOPIC_OPTIONS = ['All Topics', 'Data Load Error'] 
     
 # --- Scale Definitions (Unchanged) ---
 min_tsne_x = -90.0  
@@ -46,11 +35,10 @@ color_scale = alt.Scale(
 # 2. SELECTION (DROPDOWN MENU)
 # ===================================================================
 
-# This list is now populated dynamically from the data
 topic_selection = alt.selection_point(
     fields=['TopicName'], 
     bind=alt.binding_select(
-        name=' ', 
+        # CRITICAL CHANGE: name property removed 
         options=MY_TOPIC_OPTIONS 
     ), 
     empty='all' 

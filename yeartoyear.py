@@ -1,6 +1,6 @@
 import altair as alt
 
-PUBLIC_DATA_URL = "./final_combined_data.csv"
+PUBLIC_DATA_URL = "final_combined_data.csv"
 
 min_tsne_x = -15.0  # Placeholder 
 max_tsne_x = 15.0   # Placeholder
@@ -19,7 +19,12 @@ color_scale = alt.Scale(
 )
 
 final_chart = (
-    alt.Chart(alt.Data(url=PUBLIC_DATA_URL))
+    alt.Chart(
+        alt.Data(
+            url=PUBLIC_DATA_URL,
+            format=alt.DataFormat(type='csv', parse={"Year": "integer", "TSNE-x": "number", "TSNE-y": "number", "RelativeGrowthRate": "number"})
+        )
+    )
     .mark_circle(size=25, opacity=0.9)
     .encode(
         x=alt.X(

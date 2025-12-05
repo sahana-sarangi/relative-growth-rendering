@@ -32,7 +32,7 @@ purple_max = purple_center + purple_range / 2
 
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
-    range=["#4575b4", "#7f5539", "#7f5539", "#dc2f02"]
+    range=["#373da9", "#7f5539", "#dc2f02"]
 )
 
 # ===================================================================

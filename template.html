@@ -10,7 +10,7 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #eef2f6; /* Soft, cool background */
+            background-color: #eef2f6;
         }
         
         /* Main Container for the entire application */
@@ -25,7 +25,7 @@
         
         /* Header Bar Styling (Modern and Professional) */
         .header-bar {
-            background-color: #4a4e69; /* Darker, modern accent color */
+            background-color: #4a4e69; 
             color: white;
             padding: 30px 0;
             text-align: center;
@@ -46,37 +46,42 @@
             background-color: white;
             padding: 20px 30px;
             border-bottom: 1px solid #ddd;
-            display: flex; /* Forces children (span and div) to align horizontally */
+            display: flex; /* CRITICAL: Forces children (label and dropdown container) to align horizontally */
             align-items: center; 
             gap: 20px; 
         }
         
         /* Style for the manually added label */
         .filter-label {
-            font-weight: 600; /* Semi-bold */
-            color: #2c3e50; /* Dark text */
+            font-weight: 600; 
+            color: #2c3e50; 
             flex-shrink: 0; 
             font-size: 1.1em;
         }
 
-        /* CRITICAL LAYOUT FIX (Aggressive Targeting with !important) */
+        /* CRITICAL LAYOUT FIX OVERRIDE */
         
-        /* 1. Ensure the parent container injected by vega-embed is inline-flex */
+        /* 1. Ensure the control container injected by vega-embed is inline-flex */
         #filter-controls {
             display: inline-flex !important;
             align-items: center !important;
+            /* Reset all margins and padding */
+            margin: 0 !important;
+            padding: 0 !important;
         }
         
-        /* 2. Target the immediate wrapper inside #filter-controls and force inline-flex to beat block display */
+        /* 2. Target ALL intermediate wrappers created by vega/altair */
         #filter-controls > div,
-        #filter-controls > form {
+        #filter-controls > form,
+        #filter-controls > form > div {
+            /* Force inline flow to prevent line breaks */
             display: inline-flex !important; 
             align-items: center !important;
             margin: 0 !important; 
             padding: 0 !important; 
         }
         
-        /* 3. Hide any residual label that Altair might generate */
+        /* 3. Hide any residual label that Altair might generate inside the wrapper */
         #filter-controls label {
             display: none !important;
         }
@@ -84,8 +89,8 @@
         /* 4. Style the generated select box for a modern look */
         #filter-controls select {
             padding: 10px 15px;
-            border: 2px solid #bdc3c7; /* Subtle border */
-            border-radius: 8px; /* Rounded corners */
+            border: 2px solid #bdc3c7; 
+            border-radius: 8px; 
             background-color: #ffffff;
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
@@ -97,7 +102,7 @@
         }
         
         #filter-controls select:focus {
-            border-color: #6a5acd; /* Focus highlight */
+            border-color: #6a5acd; 
             box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
             outline: none;
         }

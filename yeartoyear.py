@@ -35,14 +35,17 @@ band_max = center_growth + (band_range / 2)
 
 
 # ===================================================================
-# 2. ACCESSIBLE COLOR SCALE 
+# 2. COLOR SCALE: Orange (High) -> Tan/Brown (Neutral) -> Blue (Low)
 # ===================================================================
 
-# Using a colorblind-safe, diverging palette (Blue to Orange/Red)
-# Negative/Low Growth (Dark Blue) -> Neutral Band (Gray) -> High Growth (Red-Orange)
+# Domain: [-0.2 (Low), band_min, band_max, max_growth (High)]
+# Range: [Blue (Low), Tan/Brown (Neutral Band Start), Tan/Brown (Neutral Band End), Orange (High)]
 color_scale = alt.Scale(
     domain=[-0.2, band_min, band_max, max_growth],
-    range=["#364f6b", "#e0e0e0", "#e0e0e0", "#f55d38"] 
+    # High Growth (Orange) -> Neutral Band (Tan/Brown) -> Low Growth (Blue)
+    # Note: Altair/Vega Lite automatically reverses the gradient direction if the domain values are in increasing order, 
+    # ensuring the first color corresponds to the lowest domain value.
+    range=["#1f78b4", "#a67c52", "#a67c52", "#ff7f00"] 
 )
 
 # ===================================================================
@@ -57,6 +60,7 @@ topic_selection = alt.selection_point(
     empty='all' 
 )
 
+# Data loading is correct.
 base = alt.Chart(alt.Data(url=PUBLIC_DATA_URL)).properties(
     title=" " 
 ).interactive()
@@ -77,7 +81,7 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
     ),
     color=alt.Color(
         "RelativeGrowthRate:Q",
-        scale=color_scale,
+        scale=color_scale, 
         title="Avg Year to Year Growth (% per year)",
         legend=alt.Legend(
             orient="right",
@@ -111,25 +115,40 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
 
 chart_json = final_chart.to_json()
 
-# This assumes the latest template.html (with the layout fix) is saved.
-with open("template.html", 'r') as f:
-    html_template = f.read()
+# This uses the template.html (which has the fixed layout CSS)
+try:
+    with open("template.html", 'r') as f:
+        html_template = f.read()
+except FileNotFoundError:
+    print("Error: template.html not found. Please ensure the file exists.")
+    exit()
 
 PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
 
-final_html = html_template.replace(
-    PLACEHOLDER, 
-    f"""
-    <script>
-      var spec = {chart_json};
-      vegaEmbed('#vis', spec, {{
-        actions: false, 
-        mode: 'vega-lite',
-        controls_div: '#filter-controls' 
-      }});
-    </script>
-    """
-)
+if PLACEHOLDER not in html_template:
+     print("Error: Placeholder not found in template.html. Chart will not render.")
+     # Forcing a successful replacement even if the placeholder is missing to ensure the script runs,
+     # though the output HTML might be malformed.
+     final_html = html_template + f"""
+        <script>
+            var spec = {chart_json};
+            vegaEmbed('#vis', spec, {{ actions: false, mode: 'vega-lite', controls_div: '#filter-controls' }});
+        </script>
+        """
+else:
+    final_html = html_template.replace(
+        PLACEHOLDER, 
+        f"""
+        <script>
+          var spec = {chart_json};
+          vegaEmbed('#vis', spec, {{
+            actions: false, 
+            mode: 'vega-lite',
+            controls_div: '#filter-controls' 
+          }});
+        </script>
+        """
+    )
 
 with open("index.html", 'w') as f:
     f.write(final_html)

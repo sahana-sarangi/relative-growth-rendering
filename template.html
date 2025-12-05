@@ -46,7 +46,7 @@
             background-color: white;
             padding: 20px 30px;
             border-bottom: 1px solid #ddd;
-            display: flex; /* CRITICAL: Forces children (label and dropdown container) to align horizontally */
+            display: flex; 
             align-items: center; 
             gap: 20px; 
         }
@@ -59,34 +59,28 @@
             font-size: 1.1em;
         }
 
-        /* CRITICAL LAYOUT FIX OVERRIDE */
+        /* CRITICAL LAYOUT FIX OVERRIDE for Altair dropdown */
         
-        /* 1. Ensure the control container injected by vega-embed is inline-flex */
         #filter-controls {
             display: inline-flex !important;
             align-items: center !important;
-            /* Reset all margins and padding */
             margin: 0 !important;
             padding: 0 !important;
         }
         
-        /* 2. Target ALL intermediate wrappers created by vega/altair */
         #filter-controls > div,
         #filter-controls > form,
         #filter-controls > form > div {
-            /* Force inline flow to prevent line breaks */
             display: inline-flex !important; 
             align-items: center !important;
             margin: 0 !important; 
             padding: 0 !important; 
         }
         
-        /* 3. Hide any residual label that Altair might generate inside the wrapper */
         #filter-controls label {
             display: none !important;
         }
 
-        /* 4. Style the generated select box for a modern look */
         #filter-controls select {
             padding: 10px 15px;
             border: 2px solid #bdc3c7; 
@@ -115,7 +109,7 @@
             min-height: 1100px; 
         }
         
-        /* Make the chart responsive and centered */
+        /* Chart placeholder container */
         #vis {
             display: flex;
             justify-content: center;
@@ -123,9 +117,9 @@
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5" defer></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5" defer></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6" defer></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
     <div class="container">

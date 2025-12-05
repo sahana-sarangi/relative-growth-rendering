@@ -2,10 +2,10 @@ import altair as alt
 
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
 
-min_tsne_x = -15.0  # Placeholder 
-max_tsne_x = 15.0   # Placeholder
-min_tsne_y = -15.0  # Placeholder
-max_tsne_y = 15.0   # Placeholder
+min_tsne_x = -90.0  # Placeholder 
+max_tsne_x = 90.0   # Placeholder
+min_tsne_y = -90.0  # Placeholder
+max_tsne_y = 90.0   # Placeholder
 max_growth = 0.6    # Placeholder
 
 purple_center = 0.05

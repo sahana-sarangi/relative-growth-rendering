@@ -1,4 +1,3 @@
-
 import altair as alt
 import json 
 import pandas as pd
@@ -27,12 +26,13 @@ purple_min = purple_center - purple_range / 2
 purple_max = purple_center + purple_range / 2
 
 # CRITICAL UPDATE: 
-# Changed color range to Red (high) -> Deep Brown (neutral) -> Deep Cyan (low).
-# Hex codes used for maximum distinctness: Deep Cyan (#008B8B), Deep Brown (#5C4033), Red (#FF0000).
+# Changed to a colorblind-friendly, high-luminosity contrast palette (Blue-Yellow-Red).
+# This is a highly accessible diverging scheme that prevents pink/purple interpolation.
+# Hex codes used: Deep Blue (#4575B4), Bright Neutral Yellow (#FFFFBF), Strong Red (#D73027).
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
-    # Range is Deep Cyan (low), Deep Brown (neutral low), Deep Brown (neutral high), Red (high)
-    range=["#008B8B", "#5C4033", "#5C4033", "#FF0000"]
+    # Range is Deep Blue (low), Bright Neutral (center low), Bright Neutral (center high), Strong Red (high)
+    range=["#4575B4", "#FFFFBF", "#FFFFBF", "#D73027"]
 )
 
 # ===================================================================

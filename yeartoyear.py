@@ -1,9 +1,13 @@
-
 import altair as alt
 import json 
-import pandas as pd
+import pandas as pd 
 import io 
 
+# ===================================================================
+# 1. CONFIGURATION & DATA SOURCE
+# ===================================================================
+
+# !!! CRITICAL: Use your confirmed working GitHub RAW link here !!!
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
 
 # --- Dynamic Topic Extraction ---

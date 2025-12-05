@@ -38,14 +38,14 @@
             opacity: 0.8;
         }
 
-        /* Controls Area: FIX */
+        /* Controls Area: Outer container (Flex parent) */
         .controls-area {
             background-color: white;
             padding: 20px 30px;
             border-bottom: 1px solid #ddd;
             display: flex; /* Forces children (span and div) to align horizontally */
             align-items: center; 
-            gap: 15px; /* Spacing between the label and the dropdown */
+            gap: 15px; 
             border-top: 1px solid #ddd;
         }
         
@@ -53,20 +53,33 @@
         .filter-label {
             font-weight: bold;
             color: #555;
+            flex-shrink: 0; 
         }
 
-        /* CRITICAL FIX: Ensure the injected control container itself uses an inline layout */
+        /* CRITICAL FIX: Target the injected control container and its immediate children using !important */
+        
+        /* 1. Ensure the parent container injected by vega-embed is inline */
         #filter-controls {
-            display: inline-flex;
-            align-items: center;
+            display: inline-flex !important;
+            align-items: center !important;
         }
         
-        /* Hide any residual label that Altair might generate */
+        /* 2. Target the immediate wrapper div/form that vega-embed places inside #filter-controls 
+              and ensure it doesn't break the line. */
+        #filter-controls > div,
+        #filter-controls > form {
+            display: inline-flex !important; 
+            align-items: center !important;
+            margin: 0 !important; 
+            padding: 0 !important; 
+        }
+        
+        /* 3. Hide any residual label that Altair might generate */
         #filter-controls label {
             display: none !important;
         }
 
-        /* Style the generated select box directly */
+        /* 4. Style the generated select box directly */
         #filter-controls select {
             padding: 8px 12px;
             border: 1px solid #ccc;

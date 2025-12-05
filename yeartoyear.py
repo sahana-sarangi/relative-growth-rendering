@@ -80,20 +80,23 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
     fontSize=18, anchor="start"
 )
 
-# Generate the Vega-Lite JSON specification
+# Dump chart JSON string safely
 chart_json = final_chart.to_json()
 
 # Read the custom HTML template file
 with open("template.html", 'r') as f:
     html_template = f.read()
 
+# Placeholder string in template.html
+PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
+
 # Inject the chart JSON into the template's placeholder script block
 final_html = html_template.replace(
-    "",
+    PLACEHOLDER, 
     f"""
     <script>
       var spec = {chart_json};
-      // The chart will be embedded in #vis, and controls in #filter-controls
+      // Embed the spec into the #vis div. Controls go into #filter-controls.
       vegaEmbed('#vis', spec, {{
         actions: false, 
         mode: 'vega-lite',

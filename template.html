@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html>
 <head>
     <title>Year To Year Relative Growth Map</title>
@@ -45,13 +45,10 @@
         .controls-area {
             background-color: white;
             padding: 20px 30px;
-            /* Removed border-bottom here, added it back to the new parent container if needed */
+            border-bottom: 1px solid #ddd;
             display: flex; 
             align-items: center; 
             gap: 20px; 
-            /* Added padding-top and border-bottom for visual separation */
-            padding-top: 10px;
-            border-bottom: 1px solid #ddd; 
         }
         
         /* Style for the manually added label */
@@ -108,7 +105,7 @@
         /* Visualization Area */
         .vis-area {
             background-color: white;
-            padding: 0; /* Changed padding to 0, since controls-area and #vis will handle their own spacing now */
+            padding: 30px;
             min-height: 1100px; 
         }
         
@@ -117,7 +114,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 30px; /* Added padding back to the chart area */
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
@@ -132,16 +128,15 @@
             <p>2D visualization of topic growth based on t-SNE coordinates</p>
         </div>
 
-        <div class="vis-area">
-            <!-- DROPDOWN MOVED HERE -->
-            <div class="controls-area">
-                <!-- Manually placed label text -->
-                <span class="filter-label">Filter Topic:</span>
-                
-                <!-- Altair/Vega-Embed injects the dropdown control here -->
-                <div id="filter-controls"></div>
-            </div>
+        <div class="controls-area">
+            <!-- Manually placed label text -->
+            <span class="filter-label">Filter Topic:</span>
             
+            <!-- Altair/Vega-Embed injects the dropdown control here -->
+            <div id="filter-controls"></div>
+        </div>
+        
+        <div class="vis-area">
             <!-- Chart placeholder -->
             <div id="vis"></div>
             <!-- Zoom/Pan controls will appear here automatically -->

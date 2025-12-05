@@ -1,6 +1,6 @@
 import altair as alt
 
-PUBLIC_DATA_URL = "final_combined_data.csv"
+PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
 
 min_tsne_x = -15.0  # Placeholder 
 max_tsne_x = 15.0   # Placeholder

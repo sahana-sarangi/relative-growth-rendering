@@ -26,12 +26,12 @@ purple_min = purple_center - purple_range / 2
 purple_max = purple_center + purple_range / 2
 
 # CRITICAL UPDATE: 
-# Changed color range to Dark Orange (high) -> Brown (neutral) -> Deep Cyan (low).
-# Hex codes used: Deep Cyan (#008b8b), Brown (#a0522d), Dark Orange (#cc5500).
+# Changed color range to Bright Orange (high) -> Deep Brown (neutral) -> Deep Cyan (low).
+# Hex codes used for maximum distinctness: Deep Cyan (#008B8B), Deep Brown (#5C4033), Bright Orange (#FF8C00).
 color_scale = alt.Scale(
     domain=[-0.2, purple_min, purple_max, max_growth],
-    # Range is Deep Cyan (low), Brown (neutral low), Brown (neutral high), Dark Orange (high)
-    range=["#008b8b", "#a0522d", "#a0522d", "#cc5500"]
+    # Range is Deep Cyan (low), Deep Brown (neutral low), Deep Brown (neutral high), Bright Orange (high)
+    range=["#008B8B", "#5C4033", "#5C4033", "#FF8C00"]
 )
 
 # ===================================================================

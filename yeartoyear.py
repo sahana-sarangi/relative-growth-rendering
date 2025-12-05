@@ -7,21 +7,40 @@ import io
 # 1. CONFIGURATION & DATA SOURCE
 # ===================================================================
 
-# NOTE: Switched to a stable GitHub RAW link for reliable Altair data loading, 
-# as the previous Dropbox sharing link often fails to load raw CSV data.
-PUBLIC_DATA_URL = "https://raw.githubusercontent.com/sahana-sarangi/relative-growth-rendering/main/final_combined_data.csv" 
+# FIX: Reverting to the original Dropbox URL. The GitHub link was serving a Git LFS pointer file.
+# The Python script should be able to read this raw URL, and the data will be embedded into the chart.
+PUBLIC_DATA_URL = "https://www.dropbox.com/scl/fi/gynl2pd6wpt5g9eift2s6/final_combined_data.csv?rlkey=v9rkbqc0bjc90fvcfso8m5ta4&st=mcfqrem2&dl=1" 
 
-# --- Dynamic Topic Extraction ---
-# This part is necessary to populate the new manual dropdown in the HTML
+# --- Data Loading and Topic Extraction (CRITICAL FIX) ---
 try:
-    # Load data from the public URL for topic list extraction
+    # 1. Load data directly into Python using pandas.
+    # Reading from the Dropbox raw link
     data_response = pd.read_csv(PUBLIC_DATA_URL)
+    
+    # Check for empty columns (meaning data load failed)
+    if data_response.empty or 'TopicName' not in data_response.columns:
+        # Check if the data frame loaded anything at all
+        if data_response.empty:
+            raise Exception("DataFrame loaded is empty. Check URL accessibility or file content.")
+        
+        # If not empty but 'TopicName' is missing
+        print(f"Error: 'TopicName' column not found. Available columns: {data_response.columns.tolist()}")
+        raise KeyError("'TopicName' not found after loading.")
+    
+    # 2. Extract topics from the successfully loaded data
     unique_topics = data_response['TopicName'].unique().tolist()
     MY_TOPIC_OPTIONS = ['All Topics'] + sorted(unique_topics)
-except Exception:
-    # Fallback in case of data loading error
-    MY_TOPIC_OPTIONS = ['All Topics', 'Data Load Error'] 
     
+    # 3. Convert the DataFrame to JSON record format for direct injection into Altair
+    # This bypasses web security restrictions that blocked the remote URL loading.
+    DATA_VALUES_JSON = data_response.to_dict('records')
+
+except Exception as e:
+    # Fallback in case of data loading error
+    print(f"Error loading data via pandas: {e}")
+    MY_TOPIC_OPTIONS = ['All Topics', 'Data Load Failed'] 
+    DATA_VALUES_JSON = [] 
+
 # --- Scale Definitions (Using your provided values) ---
 min_tsne_x = -15.0  
 max_tsne_x = 15.0   
@@ -51,7 +70,8 @@ color_scale = alt.Scale(
 # Define a simple parameter (signal) for the filter. This will be controlled manually by JavaScript.
 topic_param = alt.param(name='topic_selection', value='All Topics')
 
-base = alt.Chart(alt.Data(url=PUBLIC_DATA_URL)).properties(
+# CRITICAL FIX: Use alt.Data(values=...) to inject the data directly
+base = alt.Chart(alt.Data(values=DATA_VALUES_JSON)).properties(
     title=" " 
 ).interactive()
 
@@ -98,22 +118,25 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
 ).add_params(
     topic_param # Attach the parameter so it can be controlled by the Vega View API
 ).properties(
-    title="Year To Year Relative Growth - t-SNE Map", # Retained your manual title
+    title="Year To Year Relative Growth - t-SNE Map", 
     width=700, 
     height=1000
 ).configure_title(
     fontSize=18, anchor="start"
 ).configure_axis(
-    labelFontSize=12, titleFontSize=14, grid=True # Retained your axis config
+    labelFontSize=12, titleFontSize=14, grid=True 
 ).configure_view(
-    strokeWidth=0 # Retained your view config
+    strokeWidth=0 
 )
 
 # ===================================================================
 # 4. GENERATE AND INJECT HTML (MANUAL FILTER HANDLING)
 # ===================================================================
 
+# Convert the chart to JSON
 chart_json = final_chart.to_json()
+
+# Serialize the topic options for JavaScript
 topic_options_json = json.dumps(MY_TOPIC_OPTIONS)
 
 # Load the HTML template from the Canvas (template.html)
@@ -121,6 +144,7 @@ try:
     with open("template.html", 'r') as f:
         html_template = f.read()
 except FileNotFoundError:
+    # This error should be caught in the previous conversation step, but kept for robustness
     print("Error: template.html not found. Please ensure the file exists.")
     exit()
 
@@ -129,6 +153,7 @@ PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
 # Injection script handles chart embedding and manual dropdown wiring
 injection_script = f"""
     <script>
+      // The Vega-Lite spec already contains the data as embedded values (DATA_VALUES_JSON)
       var spec = {chart_json};
       var topicOptions = {topic_options_json};
       

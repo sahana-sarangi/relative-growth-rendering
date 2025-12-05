@@ -27,12 +27,17 @@ max_growth = 0.6
 
 purple_center = 0.05
 purple_range = 0.02
-purple_min = purple_center - purple_range / 2
-purple_max = purple_center + purple_range / 2
+# We no longer need purple_min/max since we're using a three-point scale centered on purple_center
+# purple_min = purple_center - purple_range / 2
+# purple_max = purple_center + purple_range / 2
 
+# === FINAL CORRECTED COLOR SCALE (Blue -> Tan -> Orange) ===
+# We use three colors in the range: Blue (low), Tan (center), Orange (high)
 color_scale = alt.Scale(
-    domain=[-0.2, purple_min, purple_max, max_growth],
-    range=["#4575b4", "#762a83", "#762a83", "#d73027"]
+    # Domain remains three points for a clean divergence
+    domain=[-0.2, purple_center, max_growth],
+    # Range: Dark Blue (Negative Growth) -> Tan (Near 0 Growth) -> Bright Orange (Positive Growth)
+    range=["#4575b4", "#e0cfa9", "#fdae61"]
 )
 
 # ===================================================================
@@ -109,7 +114,7 @@ chart_json = final_chart.to_json()
 with open("template.html", 'r') as f:
     html_template = f.read()
 
-PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
+PLACEHOLDER = ""
 
 final_html = html_template.replace(
     PLACEHOLDER, 

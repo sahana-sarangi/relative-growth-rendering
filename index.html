@@ -145,20 +145,27 @@
     
     
     <script>
+      // The Vega-Lite spec now references the data via URL, keeping the HTML file small
       var spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
   "config": {
+    "axis": {
+      "grid": true,
+      "labelFontSize": 12,
+      "titleFontSize": 14
+    },
     "title": {
       "anchor": "start",
       "fontSize": 18
     },
     "view": {
       "continuousHeight": 300,
-      "continuousWidth": 300
+      "continuousWidth": 300,
+      "strokeWidth": 0
     }
   },
   "data": {
-    "url": "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/refs/heads/main/final_combined_data.csv"
+    "url": "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/main/final_combined_data.csv"
   },
   "encoding": {
     "color": {
@@ -181,10 +188,10 @@
           0.6
         ],
         "range": [
-          "#4575b4",
-          "#762a83",
-          "#762a83",
-          "#d73027"
+          "#2c7bb6",
+          "#f7f7d9",
+          "#f7f7d9",
+          "#fc8d59"
         ]
       },
       "title": "Avg Year to Year Growth (% per year)",
@@ -192,7 +199,7 @@
     },
     "opacity": {
       "condition": {
-        "param": "param_1670790da9304884",
+        "test": "((topic_selection === 'All Topics') || (datum.TopicName === topic_selection))",
         "value": 0.9
       },
       "value": 0.1
@@ -224,8 +231,8 @@
       "field": "TSNE-x",
       "scale": {
         "domain": [
-          -90.0,
-          90.0
+          -15.0,
+          15.0
         ]
       },
       "title": "t-SNE x",
@@ -235,8 +242,8 @@
       "field": "TSNE-y",
       "scale": {
         "domain": [
-          -90.0,
-          90.0
+          -15.0,
+          15.0
         ]
       },
       "title": "t-SNE y",
@@ -262,86 +269,42 @@
       }
     },
     {
-      "bind": {
-        "input": "select",
-        "options": [
-          "All Topics",
-          "Academic Radiation Oncology Training and Equity...",
-          "Acute Pain Management and Opioid Use in Cancer ...",
-          "Advanced MRI Radiomics for Brain Metastases",
-          "Advanced Nasopharyngeal Carcinoma Treatment Inn...",
-          "Advanced Radiation Therapies in Lung Cancer",
-          "Advanced Techniques in Cervical Cancer Brachyth...",
-          "Advanced Techniques in Pancreatic Cancer Radiot...",
-          "Advanced Techniques in Prostate Cancer Radiothe...",
-          "Advanced Techniques in Proton Therapy.",
-          "Advanced Techniques in Radiation Oncology",
-          "Advanced Therapeutic Strategies in Glioblastoma...",
-          "Advanced Therapies in Oropharyngeal Cancer",
-          "Advanced Treatment Strategies for Esophageal Ca...",
-          "Advanced Treatment Strategies in Gynecologic On...",
-          "Bladder Cancer Radiation Therapy Advancements",
-          "Breast Cancer Radiotherapy Innovations",
-          "Breast Cancer Radiotherapy-Induced Skin Toxicit...",
-          "Breast Tumor Contouring Excellence Workshop",
-          "Bridging Radiotherapy for CAR-T Therapy in Aggr...",
-          "Cancer Disparities in Health Outcomes",
-          "Cardiac Radioablation for Ventricular Tachycardia",
-          "Cardiac Toxicity in Radiation Oncology",
-          "Cell-Free DNA Fragmentomics for Early Detection...",
-          "Cutaneous Skin Cancer Radiotherapy Innovations",
-          "Deep Learning Applications in Radiation Oncology",
-          "Dose Rate Effects in Spatially Fractionated Rad...",
-          "Dosimetric Impact of Rectal Spacers in Prostate...",
-          "Financial Implications of Radiation Oncology Tr...",
-          "Global Radiotherapy Access Disparities",
-          "HPV-Driven Innovations in Radiation Oncology",
-          "Hepatocellular Carcinoma Radiotherapy Innovations",
-          "Hippocampal Avoidance Strategies in Brain Radio...",
-          "Immunomodulatory Effects of Radiotherapy in Bre...",
-          "Immunomodulatory Effects of Tumor Treating Fiel...",
-          "Intratumoral Nerve Recruitment and Perineural I...",
-          "Lymphedema Risk in Breast Cancer Radiotherapy",
-          "Nanoparticle-Mediated Radiodynamic Therapy",
-          "Neoadjuvant Strategies in Rectal Cancer.",
-          "Patient Portal Messaging Trends in Radiation On...",
-          "Patient-Centered Innovations in Radiation Oncology",
-          "Pediatric Brain Metastases Stereotactic Radiosu...",
-          "Pediatric Proton Therapy Outcomes",
-          "Pediatric Unilateral Retinoblastoma Treatment O...",
-          "Predictive Biomarkers in Radiation Oncology",
-          "Predictive Radiomics for Lung Cancer Radiotherapy",
-          "Predictive Radiomics in Radiation Oncology",
-          "Proton Therapy Trial Diversity",
-          "Radiation Oncology Quality Improvement and Safe...",
-          "Radiation-Induced Cancer Therapy Innovations",
-          "Radiation-Induced Cardiac Injury Mechanisms and...",
-          "Radiation-Induced Lymphopenia Predictors in Bre...",
-          "Renal Cell Carcinoma Stereotactic Innovations",
-          "Spine Stereotactic Radiosurgery Outcomes",
-          "Thyroid Cancer Radiotherapy Innovations",
-          "Total Body Irradiation-Related Hematologic Toxi...",
-          "Tumor Treating Fields (TTFields) Optimization i..."
-        ]
-      },
-      "name": "param_1670790da9304884",
-      "select": {
-        "fields": [
-          "TopicName"
-        ],
-        "type": "point"
-      }
+      "name": "topic_selection",
+      "value": "All Topics"
     }
   ],
-  "title": " ",
-  "width": 1000
+  "title": "Year To Year Relative Growth - t-SNE Map",
+  "width": 700
 };
-      vegaEmbed('#vis', spec, {
+      var topicOptions = ["All Topics", "Academic Radiation Oncology Training and Equity...", "Acute Pain Management and Opioid Use in Cancer ...", "Advanced MRI Radiomics for Brain Metastases", "Advanced Nasopharyngeal Carcinoma Treatment Inn...", "Advanced Radiation Therapies in Lung Cancer", "Advanced Techniques in Cervical Cancer Brachyth...", "Advanced Techniques in Pancreatic Cancer Radiot...", "Advanced Techniques in Prostate Cancer Radiothe...", "Advanced Techniques in Proton Therapy.", "Advanced Techniques in Radiation Oncology", "Advanced Therapeutic Strategies in Glioblastoma...", "Advanced Therapies in Oropharyngeal Cancer", "Advanced Treatment Strategies for Esophageal Ca...", "Advanced Treatment Strategies in Gynecologic On...", "Bladder Cancer Radiation Therapy Advancements", "Breast Cancer Radiotherapy Innovations", "Breast Cancer Radiotherapy-Induced Skin Toxicit...", "Breast Tumor Contouring Excellence Workshop", "Bridging Radiotherapy for CAR-T Therapy in Aggr...", "Cancer Disparities in Health Outcomes", "Cardiac Radioablation for Ventricular Tachycardia", "Cardiac Toxicity in Radiation Oncology", "Cell-Free DNA Fragmentomics for Early Detection...", "Cutaneous Skin Cancer Radiotherapy Innovations", "Deep Learning Applications in Radiation Oncology", "Dose Rate Effects in Spatially Fractionated Rad...", "Dosimetric Impact of Rectal Spacers in Prostate...", "Financial Implications of Radiation Oncology Tr...", "Global Radiotherapy Access Disparities", "HPV-Driven Innovations in Radiation Oncology", "Hepatocellular Carcinoma Radiotherapy Innovations", "Hippocampal Avoidance Strategies in Brain Radio...", "Immunomodulatory Effects of Radiotherapy in Bre...", "Immunomodulatory Effects of Tumor Treating Fiel...", "Intratumoral Nerve Recruitment and Perineural I...", "Lymphedema Risk in Breast Cancer Radiotherapy", "Nanoparticle-Mediated Radiodynamic Therapy", "Neoadjuvant Strategies in Rectal Cancer.", "Patient Portal Messaging Trends in Radiation On...", "Patient-Centered Innovations in Radiation Oncology", "Pediatric Brain Metastases Stereotactic Radiosu...", "Pediatric Proton Therapy Outcomes", "Pediatric Unilateral Retinoblastoma Treatment O...", "Predictive Biomarkers in Radiation Oncology", "Predictive Radiomics for Lung Cancer Radiotherapy", "Predictive Radiomics in Radiation Oncology", "Proton Therapy Trial Diversity", "Radiation Oncology Quality Improvement and Safe...", "Radiation-Induced Cancer Therapy Innovations", "Radiation-Induced Cardiac Injury Mechanisms and...", "Radiation-Induced Lymphopenia Predictors in Bre...", "Renal Cell Carcinoma Stereotactic Innovations", "Spine Stereotactic Radiosurgery Outcomes", "Thyroid Cancer Radiotherapy Innovations", "Total Body Irradiation-Related Hematologic Toxi...", "Tumor Treating Fields (TTFields) Optimization i..."];
+      
+      var chartView;
+      var selectElement = document.getElementById('topic-select');
+      
+      // 1. Populate the dropdown
+      topicOptions.forEach(function(topic) {
+          var option = document.createElement('option');
+          option.value = topic;
+          option.text = topic;
+          selectElement.appendChild(option);
+      });
+
+      // 2. Initialize the chart (no controls_div option used)
+      vegaEmbed('#vis', spec, { 
         actions: false, 
         mode: 'vega-lite',
-        controls_div: '#filter-controls' 
-      });
+      }).then(result => {
+          chartView = result.view;
+          
+          // 3. Set up the change listener to update the 'topic_selection' signal
+          selectElement.addEventListener('change', function() {
+              var selectedTopic = this.value;
+              
+              // Update the Altair parameter (signal) defined in the chart spec
+              chartView.signal('topic_selection', selectedTopic).runAsync();
+          });
+      }).catch(console.error);
     </script>
-    
+
 </body>
 </html>

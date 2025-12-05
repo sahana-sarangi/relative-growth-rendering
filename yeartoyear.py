@@ -35,15 +35,14 @@ band_max = center_growth + (band_range / 2)
 
 
 # ===================================================================
-# 2. ACCESSIBLE COLOR SCALE (Orange to Blue, NO WHITE)
+# 2. ACCESSIBLE COLOR SCALE 
 # ===================================================================
 
-# Domain: [-0.2 (Low), band_min, band_max, max_growth (High)]
-# Range: [Blue (Low), Dark Gray (Neutral Band Start), Dark Gray (Neutral Band End), Orange (High)]
+# Using a colorblind-safe, diverging palette (Blue to Orange/Red)
+# Negative/Low Growth (Dark Blue) -> Neutral Band (Gray) -> High Growth (Red-Orange)
 color_scale = alt.Scale(
     domain=[-0.2, band_min, band_max, max_growth],
-    # Uses a dark gray center for contrast instead of white
-    range=["#1f78b4", "#4c4c4c", "#4c4c4c", "#ff7f00"] 
+    range=["#364f6b", "#e0e0e0", "#e0e0e0", "#f55d38"] 
 )
 
 # ===================================================================
@@ -58,7 +57,6 @@ topic_selection = alt.selection_point(
     empty='all' 
 )
 
-# Data loading is correct; reloading the file should fix the breakage.
 base = alt.Chart(alt.Data(url=PUBLIC_DATA_URL)).properties(
     title=" " 
 ).interactive()
@@ -79,7 +77,7 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
     ),
     color=alt.Color(
         "RelativeGrowthRate:Q",
-        scale=color_scale, # NEW ACCESSIBLE SCALE APPLIED HERE
+        scale=color_scale,
         title="Avg Year to Year Growth (% per year)",
         legend=alt.Legend(
             orient="right",
@@ -113,7 +111,7 @@ final_chart = base.mark_circle(size=25, opacity=0.9).encode(
 
 chart_json = final_chart.to_json()
 
-# This uses the template.html (which has the fixed layout CSS)
+# This assumes the latest template.html (with the layout fix) is saved.
 with open("template.html", 'r') as f:
     html_template = f.read()
 

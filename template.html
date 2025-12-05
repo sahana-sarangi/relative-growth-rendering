@@ -4,12 +4,13 @@
     <title>Year To Year Relative Growth Map</title>
     <meta charset="UTF-8">
     <style>
-        /* General Body and Background Styling */
+        /* Global Styles and Font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f5; 
+            background-color: #eef2f6; /* Soft, cool background */
         }
         
         /* Main Container for the entire application */
@@ -17,25 +18,27 @@
             max-width: 1400px; 
             margin: 40px auto; 
             padding: 0;
+            border-radius: 12px;
+            overflow: hidden; /* Ensures border-radius is applied cleanly */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
         }
         
         /* Header Bar Styling */
         .header-bar {
-            background-color: #6a5acd; 
+            background-color: #4a4e69; /* Darker, modern accent color */
             color: white;
-            padding: 20px 0;
+            padding: 30px 0;
             text-align: center;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
         }
         .header-bar h1 {
             margin: 0;
-            font-size: 2.2em;
+            font-size: 2.5em;
+            font-weight: 700;
         }
         .header-bar p {
-            margin: 5px 0 0 0;
-            font-size: 1.1em;
-            opacity: 0.8;
+            margin: 8px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
         }
 
         /* Controls Area: Outer container (Flex parent) */
@@ -45,27 +48,26 @@
             border-bottom: 1px solid #ddd;
             display: flex; /* Forces children (span and div) to align horizontally */
             align-items: center; 
-            gap: 15px; 
-            border-top: 1px solid #ddd;
+            gap: 20px; /* Increased spacing */
         }
         
         /* Style for the manually added label */
         .filter-label {
-            font-weight: bold;
-            color: #555;
+            font-weight: 600; /* Semi-bold */
+            color: #2c3e50; /* Dark text */
             flex-shrink: 0; 
+            font-size: 1.1em;
         }
 
-        /* CRITICAL FIX: Target the injected control container and its immediate children using !important */
+        /* CRITICAL LAYOUT FIX (Aggressive Targeting) */
         
-        /* 1. Ensure the parent container injected by vega-embed is inline */
+        /* 1. Ensure the parent container injected by vega-embed is inline-flex */
         #filter-controls {
             display: inline-flex !important;
             align-items: center !important;
         }
         
-        /* 2. Target the immediate wrapper div/form that vega-embed places inside #filter-controls 
-              and ensure it doesn't break the line. */
+        /* 2. Target the immediate wrapper inside #filter-controls and force inline-flex to beat block display */
         #filter-controls > div,
         #filter-controls > form {
             display: inline-flex !important; 
@@ -79,21 +81,40 @@
             display: none !important;
         }
 
-        /* 4. Style the generated select box directly */
+        /* 4. Style the generated select box for a modern look */
         #filter-controls select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 10px 15px;
+            border: 2px solid #bdc3c7; /* Subtle border */
+            border-radius: 8px; /* Rounded corners */
+            background-color: #ffffff;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
         }
+        
+        #filter-controls select:hover {
+            border-color: #95a5a6;
+        }
+        
+        #filter-controls select:focus {
+            border-color: #6a5acd; /* Focus highlight */
+            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+            outline: none;
+        }
+
 
         /* Visualization Area */
         .vis-area {
             background-color: white;
             padding: 30px;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
             min-height: 1100px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
+        
+        /* Make the chart responsive and centered */
+        #vis {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
     <!-- Vega/Vega-Lite Dependencies -->

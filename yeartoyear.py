@@ -7,24 +7,28 @@ import io
 # 1. CONFIGURATION & DATA SOURCE
 # ===================================================================
 
-# UPDATED: Switching to the direct LFS media URL. The "raw.githubusercontent.com" domain only serves
-# the small pointer file for LFS content, causing the 'TopicName' error.
-# The media domain serves the actual large file content, which should fix the data loading issue.
+# UPDATED: Reverting to the LFS media URL as the standard 'raw.githubusercontent.com' 
+# path is confirmed to be consistently serving the LFS pointer file.
+# This URL is more likely to serve the actual large file content to the browser, 
+# even if it causes a hiccup in the Python topic loading step.
 PUBLIC_DATA_URL = "https://media.githubusercontent.com/media/sahana-sarangi/relative-growth-rendering/main/final_combined_data.csv" 
 
 # --- Data Loading and Topic Extraction (ONLY for the Dropdown) ---
 # This block attempts to load the topics for the dropdown list.
 try:
     # 1. Load data directly into Python using pandas.
-    # We do NOT use index_col=0 to let pandas infer the header.
     data_response = pd.read_csv(PUBLIC_DATA_URL) 
     
     # Check for empty columns and TopicName existence
-    if data_response.empty or 'TopicName' not in data_response.columns:
-        if data_response.empty:
-            raise Exception("DataFrame loaded is empty. Check URL accessibility or file content.")
-        
-        # This check catches the LFS pointer file error.
+    if data_response.empty:
+        raise Exception("DataFrame loaded is empty. Check URL accessibility or file content.")
+    
+    if 'TopicName' not in data_response.columns:
+        # This confirms the LFS pointer file issue (when it has only one column: 'version...')
+        if len(data_response.columns) == 1 and data_response.columns[0].startswith('version'):
+            print("CRITICAL LFS ERROR: The data URL is serving the Git LFS pointer file, not the CSV content.")
+            print("Please ensure your 'final_combined_data.csv' file has been correctly pushed to Git LFS.")
+
         print(f"Error: 'TopicName' column not found. Available columns: {data_response.columns.tolist()}")
         raise KeyError("'TopicName' not found after loading.")
     

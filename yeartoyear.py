@@ -60,7 +60,7 @@ main_chart = (
     .add_params(topic_selection)
     .properties(width=850, height=750) # Fixed width helps prevent legend clipping
     .interactive()
-    .configure(padding={"left": 50, "top": 50, "right": 150, "bottom": 50}) # Massive right padding
+    .configure(padding={"left": 50, "top": 15, "right": 150, "bottom": 50}) # Massive right padding
     .configure_view(stroke=None)
 )
 

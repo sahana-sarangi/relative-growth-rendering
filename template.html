@@ -128,22 +128,30 @@
             <h1>Year To Year Relative Growth Map</h1>
             <p>2D visualization of topic growth based on t-SNE coordinates</p>
         </div>
-        <br/>
-        <br/>
-        <div class="controls-area">
-            <!-- Manually placed label text -->
-            <span class="filter-label">Filter Topic:</span>
-            
-            <!-- Altair/Vega-Embed injects the dropdown control here -->
-            <div id="filter-controls"></div>
-        </div>
-        <br/><br/>
-        <div class="vis-area">
-            <!-- Chart placeholder -->
-            <div id="vis"></div>
-            <!-- Zoom/Pan controls will appear here automatically -->
-        </div>
-    </div>
+        <table>
+            <tr>
+                <td>
+                    <div class="controls-area">
+                        <!-- Manually placed label text -->
+                        <span class="filter-label">Filter Topic:</span>
+                        <br/><br/>
+                        <!-- Altair/Vega-Embed injects the dropdown control here -->
+                        <div id="filter-controls"></div>
+                    </div>                    
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br/><br/>
+                    <div class="vis-area">
+                        <!-- Chart placeholder -->
+                        <div id="vis"></div>
+                        <!-- Zoom/Pan controls will appear here automatically -->
+                    </div>
+                </div>                    
+                </td>
+            </tr>
+        </table>
     
     <!-- Chart embedding script will be added here -->
 </body>

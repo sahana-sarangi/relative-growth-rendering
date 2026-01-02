@@ -109,7 +109,7 @@ final_html = html_template.replace(
 with open("index.html", "w") as f:
     f.write(final_html)
 '''
-
+'''
 import altair as alt
 import pandas as pd
 
@@ -190,5 +190,145 @@ final_html = html_template.replace(
 )
 
 # Write final HTML
+with open("index.html", "w") as f:
+    f.write(final_html)
+'''
+
+import altair as alt
+import pandas as pd
+
+# -----------------------------
+# Data source
+# -----------------------------
+PUBLIC_DATA_URL = (
+    "https://media.githubusercontent.com/media/"
+    "sahana-sarangi/relative-growth-rendering/"
+    "refs/heads/main/final_combined_data.csv"
+)
+
+# Read once in Python ONLY to extract topic names
+data_response = pd.read_csv(PUBLIC_DATA_URL)
+unique_topics = sorted(data_response["TopicName"].dropna().unique().tolist())
+MY_TOPIC_OPTIONS = ["All Topics"] + unique_topics
+
+# -----------------------------
+# Visualization constants
+# -----------------------------
+min_tsne_x = -90.0
+max_tsne_x = 90.0
+min_tsne_y = -90.0
+max_tsne_y = 90.0
+max_growth = 0.4
+
+purple_center = 0.05
+purple_range = 0.02
+purple_min = purple_center - purple_range / 2
+purple_max = purple_center + purple_range / 2
+
+color_scale = alt.Scale(
+    domain=[-0.2, purple_min, purple_max, max_growth],
+    range=["#4575B4", "#FFFFBF", "#FFFFBF", "#D73027"],
+)
+
+# -----------------------------
+# Topic selection (dropdown)
+# -----------------------------
+topic_selection = alt.selection_point(
+    fields=["TopicFilter"],
+    bind=alt.binding_select(options=MY_TOPIC_OPTIONS),
+    empty="all",
+    name="Select",
+)
+
+# -----------------------------
+# Base chart (URL-based data)
+# -----------------------------
+base = (
+    alt.Chart(PUBLIC_DATA_URL)
+    .transform_calculate(
+        # Calculated field to control dropdown semantics
+        TopicFilter="datum.TopicName"
+    )
+    .interactive()
+)
+
+# -----------------------------
+# Main scatter plot
+# -----------------------------
+main_chart = base.mark_circle(size=25).encode(
+    x=alt.X(
+        "TSNE-x:Q",
+        title="t-SNE x",
+        scale=alt.Scale(domain=(min_tsne_x, max_tsne_x)),
+    ),
+    y=alt.Y(
+        "TSNE-y:Q",
+        title="t-SNE y",
+        scale=alt.Scale(domain=(min_tsne_y, max_tsne_y)),
+    ),
+    color=alt.Color(
+        "RelativeGrowthRate:Q",
+        scale=color_scale,
+        title="Avg Year to Year Growth (% per year)",
+        legend=alt.Legend(
+            orient="right",
+            format=".1%",
+            gradientLength=200,
+            gradientThickness=20,
+        ),
+    ),
+    opacity=alt.condition(
+        # FULL FIX: explicitly restore opacity for "All Topics"
+        (topic_selection | (alt.datum.TopicFilter == "All Topics")),
+        alt.value(1.0),
+        alt.value(0.1),
+    ),
+    tooltip=[
+        alt.Tooltip("AbstractTitle:N", title="Abstract Title"),
+        alt.Tooltip("TopicName:N", title="Topic Name"),
+        alt.Tooltip(
+            "RelativeGrowthRate:Q",
+            title="Avg. Year-to-Year Growth",
+            format=".2%",
+        ),
+        alt.Tooltip("Year:Q", title="Year"),
+    ],
+).properties(
+    width=1000,
+    height=1000,
+)
+
+# -----------------------------
+# Attach selection to chart
+# -----------------------------
+main_chart = main_chart.add_params(topic_selection)
+
+# -----------------------------
+# Export Vega-Lite JSON
+# -----------------------------
+chart_json = main_chart.to_json()
+
+# -----------------------------
+# Inject into HTML template
+# -----------------------------
+with open("template.html", "r") as f:
+    html_template = f.read()
+
+PLACEHOLDER = "<!-- Chart embedding script will be added here -->"
+
+final_html = html_template.replace(
+    PLACEHOLDER,
+    f"""
+    <script>
+      var spec = {chart_json};
+      vegaEmbed('#vis', spec, {{
+        actions: false,
+        mode: 'vega-lite',
+        controls_div: '#filter-controls'
+      }});
+    </script>
+    """
+)
+
 with open("index.html", "w") as f:
     f.write(final_html)

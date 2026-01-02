@@ -87,7 +87,14 @@
     },
     "opacity": {
       "condition": {
-        "param": "Select",
+        "test": {
+          "or": [
+            {
+              "param": "Select"
+            },
+            "(datum.TopicFilter === 'All Topics')"
+          ]
+        },
         "value": 1.0
       },
       "value": 0.1
@@ -221,10 +228,16 @@
       "name": "Select",
       "select": {
         "fields": [
-          "TopicName"
+          "TopicFilter"
         ],
         "type": "point"
       }
+    }
+  ],
+  "transform": [
+    {
+      "as": "TopicFilter",
+      "calculate": "datum.TopicName"
     }
   ],
   "width": 1000

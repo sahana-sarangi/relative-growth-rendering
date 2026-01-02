@@ -1,56 +1,176 @@
-<!DOCTYPE html>
+
+
+
+=<!DOCTYPE html>
+
 <html>
 <head>
     <title>Year To Year Relative Growth Map</title>
     <meta charset="UTF-8">
     <style>
+        /* Global Styles and Font */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #eef2f6;
+        }
+        
+        /* Main Container for the entire application */
+        .container {
+            max-width: 1400px; 
+            margin: 40px auto; 
+            padding: 0;
+            border-radius: 12px;
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+        
+        /* Header Bar Styling (Modern and Professional) */
+        .header-bar {
+            background-color: #4a4e69; 
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        .header-bar h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .header-bar p {
+            margin: 8px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
 
-        body { font-family: 'Inter', sans-serif; margin:0; padding:0; background:#eef2f6; }
-        .container { max-width:1400px; margin:40px auto; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
-        .header-bar { background:#4a4e69; color:white; padding:30px 0; text-align:center; }
-        .header-bar h1 { margin:0; font-size:2.5em; font-weight:700; }
-        .header-bar p { margin:8px 0 0 0; font-size:1.2em; opacity:0.9; }
+        /* Controls Area: Outer container (Flex parent) */
+        .controls-area {
+            background-color: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #ddd;
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+        }
+        
+        /* Style for the manually added label */
+        .filter-label {
+            font-weight: 600; 
+            color: #2c3e50; 
+            flex-shrink: 0; 
+            font-size: 1.1em;
+        }
 
-        .controls-area { background:white; padding:10px 30px; display:flex; align-items:center; gap:20px; border-bottom:1px solid #ddd; }
-        .filter-label { font-weight:600; color:#2c3e50; flex-shrink:0; font-size:1.1em; }
+        /* CRITICAL LAYOUT FIX OVERRIDE for Altair dropdown */
+        
+        /**
+        #filter-controls {
+            display: inline-flex !important;
+            align-items: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        #filter-controls > div,
+        #filter-controls > form,
+        #filter-controls > form > div {
+            display: inline-flex !important; 
+            align-items: center !important;
+            margin: 0 !important; 
+            padding: 0 !important; 
+        }
+        
+        #filter-controls label {
+            display: none !important;
+        }
 
-        /* Force dropdown inline */
-        #filter-controls { display:inline-flex !important; align-items:center !important; margin:0 !important; padding:0 !important; width:100%; }
-        #filter-controls select { padding:10px 15px; border:2px solid #bdc3c7; border-radius:8px; background:white; font-size:1em; cursor:pointer; }
-        #filter-controls select:hover { border-color:#95a5a6; }
-        #filter-controls select:focus { border-color:#6a5acd; box-shadow:0 0 0 3px rgba(106,90,205,0.2); outline:none; }
+        #filter-controls select {
+            padding: 10px 15px;
+            border: 2px solid #bdc3c7; 
+            border-radius: 8px; 
+            background-color: #ffffff;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        
+        #filter-controls select:hover {
+            border-color: #95a5a6;
+        }
+        
+        #filter-controls select:focus {
+            border-color: #6a5acd; 
+            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+            outline: none;
+        }
+**/
 
-        .vis-area { background:white; min-height:1100px; display:flex; flex-direction:column; align-items:center; }
-        #vis { display:block; padding:30px; margin:0; width:100%; }
+        /* Visualization Area */
+        .vis-area {
+            background-color: white;
+            padding: 30px;
+            min-height: 1100px; 
+        }
+        
+        /* Chart placeholder container */
+        #vis {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <!-- Vega/Vega-Lite Dependencies -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
-<body>
+<body style="scrollbar-color:red">
     <div class="container">
         <div class="header-bar">
             <h1>Year To Year Relative Growth Map</h1>
             <p>2D visualization of topic growth based on t-SNE coordinates</p>
         </div>
-        
-        <div class="vis-area">
-            <div class="controls-area">
-                <span class="filter-label">Filter Topic:</span>
-                <div id="filter-controls"></div> <!-- Dropdown injected here -->
-            </div>
-            <div id="vis"></div> <!-- Chart injected here -->
-        </div>
-    </div>
 
-    <!-- Chart script placeholder -->
+        <table>
+          <tr>  
+            <td>
+              <div class="controls-area">
+                <!-- Manually placed label text -->
+                <span class="filter-label">Filter Topic3:</span>
+              </td></tr>
+              <tr><td>
+                <!-- Altair/Vega-Embed injects the dropdown control here -->
+                <div id="filter-controls" style=" border:2px; color: #ac0c0c;left: 200; position: absolute;"></div>
+            </div>              
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="vis-area">
+                <!-- Chart placeholder -->
+                <div id="vis"></div>
+                <!-- Zoom/Pan controls will appear here automatically -->
+            </div>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+
+
+
+    
     
     <script>
       var spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
   "config": {
+    "title": {
+      "anchor": "start",
+      "fontSize": 18
+    },
     "view": {
       "continuousHeight": 300,
       "continuousWidth": 300
@@ -63,10 +183,14 @@
     "color": {
       "field": "RelativeGrowthRate",
       "legend": {
+        "direction": "vertical",
         "format": ".1%",
         "gradientLength": 200,
         "gradientThickness": 20,
-        "orient": "right"
+        "labelFontSize": 11,
+        "labelLimit": 250,
+        "orient": "right",
+        "titleFontSize": 13
       },
       "scale": {
         "domain": [
@@ -87,8 +211,8 @@
     },
     "opacity": {
       "condition": {
-        "param": "Select",
-        "value": 1.0
+        "param": "param_1670790da9304884",
+        "value": 0.9
       },
       "value": 0.1
     },
@@ -140,6 +264,7 @@
   },
   "height": 1000,
   "mark": {
+    "opacity": 0.9,
     "size": 25,
     "type": "circle"
   },
@@ -218,7 +343,7 @@
           "Tumor Treating Fields (TTFields) Optimization i..."
         ]
       },
-      "name": "Select",
+      "name": "param_1670790da9304884",
       "select": {
         "fields": [
           "TopicName"
@@ -227,12 +352,13 @@
       }
     }
   ],
+  "title": " ",
   "width": 1000
 };
       vegaEmbed('#vis', spec, {
-        actions: false,
+        actions: false, 
         mode: 'vega-lite',
-        controls_div: '#filter-controls'
+        controls_div: '#filter-controls' 
       });
     </script>
     

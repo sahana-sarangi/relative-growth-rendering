@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html>
 <head>
     <title>Year To Year Relative Growth Map</title>
@@ -115,7 +115,6 @@
             justify-content: center;
             align-items: center;
         }
-        
     </style>
     <!-- Vega/Vega-Lite Dependencies -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -129,20 +128,20 @@
             <p>2D visualization of topic growth based on t-SNE coordinates</p>
         </div>
 
-                    <div class="controls-area">
-                        <!-- Manually placed label text -->
-                        <span class="filter-label">Filter Topic3:</span>
-
-                        <!-- Altair/Vega-Embed injects the dropdown control here -->
-                        <div id="filter-controls"></div>
-                    </div>                    
-
-                    <div class="vis-area">
-                        <!-- Chart placeholder -->
-                        <div id="vis"></div>
-                        <!-- Zoom/Pan controls will appear here automatically -->
-                    </div>
-                </div>                    
+        <div class="controls-area">
+            <!-- Manually placed label text -->
+            <span class="filter-label">Filter Topic:</span>
+            
+            <!-- Altair/Vega-Embed injects the dropdown control here -->
+            <div id="filter-controls"></div>
+        </div>
+        
+        <div class="vis-area">
+            <!-- Chart placeholder -->
+            <div id="vis"></div>
+            <!-- Zoom/Pan controls will appear here automatically -->
+        </div>
+    </div>
     
     <!-- Chart embedding script will be added here -->
 </body>

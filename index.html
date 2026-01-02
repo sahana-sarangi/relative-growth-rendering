@@ -63,16 +63,14 @@
     "color": {
       "field": "RelativeGrowthRate",
       "legend": {
-        "format": ".1%",
-        "gradientLength": 200,
-        "gradientThickness": 20,
+        "format": ".0%",
         "orient": "right"
       },
       "scale": {
         "domain": [
           -0.2,
           0.04,
-          0.060000000000000005,
+          0.06,
           0.4
         ],
         "range": [
@@ -87,14 +85,7 @@
     },
     "opacity": {
       "condition": {
-        "test": {
-          "or": [
-            {
-              "param": "Select"
-            },
-            "(datum.TopicFilter === 'All Topics')"
-          ]
-        },
+        "param": "Select",
         "value": 1.0
       },
       "value": 0.1
@@ -126,8 +117,8 @@
       "field": "TSNE-x",
       "scale": {
         "domain": [
-          -90.0,
-          90.0
+          -90,
+          90
         ]
       },
       "title": "t-SNE x",
@@ -137,8 +128,8 @@
       "field": "TSNE-y",
       "scale": {
         "domain": [
-          -90.0,
-          90.0
+          -90,
+          90
         ]
       },
       "title": "t-SNE y",
@@ -165,8 +156,67 @@
     {
       "bind": {
         "input": "select",
-        "options": [
+        "labels": [
           "All Topics",
+          "Academic Radiation Oncology Training and Equity...",
+          "Acute Pain Management and Opioid Use in Cancer ...",
+          "Advanced MRI Radiomics for Brain Metastases",
+          "Advanced Nasopharyngeal Carcinoma Treatment Inn...",
+          "Advanced Radiation Therapies in Lung Cancer",
+          "Advanced Techniques in Cervical Cancer Brachyth...",
+          "Advanced Techniques in Pancreatic Cancer Radiot...",
+          "Advanced Techniques in Prostate Cancer Radiothe...",
+          "Advanced Techniques in Proton Therapy.",
+          "Advanced Techniques in Radiation Oncology",
+          "Advanced Therapeutic Strategies in Glioblastoma...",
+          "Advanced Therapies in Oropharyngeal Cancer",
+          "Advanced Treatment Strategies for Esophageal Ca...",
+          "Advanced Treatment Strategies in Gynecologic On...",
+          "Bladder Cancer Radiation Therapy Advancements",
+          "Breast Cancer Radiotherapy Innovations",
+          "Breast Cancer Radiotherapy-Induced Skin Toxicit...",
+          "Breast Tumor Contouring Excellence Workshop",
+          "Bridging Radiotherapy for CAR-T Therapy in Aggr...",
+          "Cancer Disparities in Health Outcomes",
+          "Cardiac Radioablation for Ventricular Tachycardia",
+          "Cardiac Toxicity in Radiation Oncology",
+          "Cell-Free DNA Fragmentomics for Early Detection...",
+          "Cutaneous Skin Cancer Radiotherapy Innovations",
+          "Deep Learning Applications in Radiation Oncology",
+          "Dose Rate Effects in Spatially Fractionated Rad...",
+          "Dosimetric Impact of Rectal Spacers in Prostate...",
+          "Financial Implications of Radiation Oncology Tr...",
+          "Global Radiotherapy Access Disparities",
+          "HPV-Driven Innovations in Radiation Oncology",
+          "Hepatocellular Carcinoma Radiotherapy Innovations",
+          "Hippocampal Avoidance Strategies in Brain Radio...",
+          "Immunomodulatory Effects of Radiotherapy in Bre...",
+          "Immunomodulatory Effects of Tumor Treating Fiel...",
+          "Intratumoral Nerve Recruitment and Perineural I...",
+          "Lymphedema Risk in Breast Cancer Radiotherapy",
+          "Nanoparticle-Mediated Radiodynamic Therapy",
+          "Neoadjuvant Strategies in Rectal Cancer.",
+          "Patient Portal Messaging Trends in Radiation On...",
+          "Patient-Centered Innovations in Radiation Oncology",
+          "Pediatric Brain Metastases Stereotactic Radiosu...",
+          "Pediatric Proton Therapy Outcomes",
+          "Pediatric Unilateral Retinoblastoma Treatment O...",
+          "Predictive Biomarkers in Radiation Oncology",
+          "Predictive Radiomics for Lung Cancer Radiotherapy",
+          "Predictive Radiomics in Radiation Oncology",
+          "Proton Therapy Trial Diversity",
+          "Radiation Oncology Quality Improvement and Safe...",
+          "Radiation-Induced Cancer Therapy Innovations",
+          "Radiation-Induced Cardiac Injury Mechanisms and...",
+          "Radiation-Induced Lymphopenia Predictors in Bre...",
+          "Renal Cell Carcinoma Stereotactic Innovations",
+          "Spine Stereotactic Radiosurgery Outcomes",
+          "Thyroid Cancer Radiotherapy Innovations",
+          "Total Body Irradiation-Related Hematologic Toxi...",
+          "Tumor Treating Fields (TTFields) Optimization i..."
+        ],
+        "options": [
+          null,
           "Academic Radiation Oncology Training and Equity...",
           "Acute Pain Management and Opioid Use in Cancer ...",
           "Advanced MRI Radiomics for Brain Metastases",
@@ -228,16 +278,10 @@
       "name": "Select",
       "select": {
         "fields": [
-          "TopicFilter"
+          "TopicName"
         ],
         "type": "point"
       }
-    }
-  ],
-  "transform": [
-    {
-      "as": "TopicFilter",
-      "calculate": "datum.TopicName"
     }
   ],
   "width": 1000

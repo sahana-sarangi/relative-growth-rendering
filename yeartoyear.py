@@ -206,110 +206,84 @@ PUBLIC_DATA_URL = (
     "refs/heads/main/final_combined_data.csv"
 )
 
-# Read once in Python ONLY to extract topic names
-data_response = pd.read_csv(PUBLIC_DATA_URL)
-unique_topics = sorted(data_response["TopicName"].dropna().unique().tolist())
-MY_TOPIC_OPTIONS = ["All Topics"] + unique_topics
+# Load once in Python to extract topics
+df = pd.read_csv(PUBLIC_DATA_URL)
+topics = sorted(df["TopicName"].dropna().unique().tolist())
+
+# IMPORTANT: None represents "All Topics"
+DROPDOWN_OPTIONS = [None] + topics
+DROPDOWN_LABELS = ["All Topics"] + topics
 
 # -----------------------------
-# Visualization constants
+# Selection
 # -----------------------------
-min_tsne_x = -90.0
-max_tsne_x = 90.0
-min_tsne_y = -90.0
-max_tsne_y = 90.0
-max_growth = 0.4
+topic_selection = alt.selection_point(
+    fields=["TopicName"],
+    bind=alt.binding_select(
+        options=DROPDOWN_OPTIONS,
+        labels=DROPDOWN_LABELS
+    ),
+    empty="all",
+    name="Select"
+)
 
-purple_center = 0.05
-purple_range = 0.02
-purple_min = purple_center - purple_range / 2
-purple_max = purple_center + purple_range / 2
-
+# -----------------------------
+# Color scale
+# -----------------------------
 color_scale = alt.Scale(
-    domain=[-0.2, purple_min, purple_max, max_growth],
+    domain=[-0.2, 0.04, 0.06, 0.4],
     range=["#4575B4", "#FFFFBF", "#FFFFBF", "#D73027"],
 )
 
 # -----------------------------
-# Topic selection (dropdown)
+# Base chart
 # -----------------------------
-topic_selection = alt.selection_point(
-    fields=["TopicFilter"],
-    bind=alt.binding_select(options=MY_TOPIC_OPTIONS),
-    empty="all",
-    name="Select",
-)
-
-# -----------------------------
-# Base chart (URL-based data)
-# -----------------------------
-base = (
-    alt.Chart(PUBLIC_DATA_URL)
-    .transform_calculate(
-        # Calculated field to control dropdown semantics
-        TopicFilter="datum.TopicName"
-    )
-    .interactive()
-)
+base = alt.Chart(PUBLIC_DATA_URL).interactive()
 
 # -----------------------------
 # Main scatter plot
 # -----------------------------
-main_chart = base.mark_circle(size=25).encode(
-    x=alt.X(
-        "TSNE-x:Q",
-        title="t-SNE x",
-        scale=alt.Scale(domain=(min_tsne_x, max_tsne_x)),
-    ),
-    y=alt.Y(
-        "TSNE-y:Q",
-        title="t-SNE y",
-        scale=alt.Scale(domain=(min_tsne_y, max_tsne_y)),
-    ),
-    color=alt.Color(
-        "RelativeGrowthRate:Q",
-        scale=color_scale,
-        title="Avg Year to Year Growth (% per year)",
-        legend=alt.Legend(
-            orient="right",
-            format=".1%",
-            gradientLength=200,
-            gradientThickness=20,
-        ),
-    ),
-    opacity=alt.condition(
-        # FULL FIX: explicitly restore opacity for "All Topics"
-        (topic_selection | (alt.datum.TopicFilter == "All Topics")),
-        alt.value(1.0),
-        alt.value(0.1),
-    ),
-    tooltip=[
-        alt.Tooltip("AbstractTitle:N", title="Abstract Title"),
-        alt.Tooltip("TopicName:N", title="Topic Name"),
-        alt.Tooltip(
+main_chart = (
+    base.mark_circle(size=25)
+    .encode(
+        x=alt.X("TSNE-x:Q", scale=alt.Scale(domain=(-90, 90)), title="t-SNE x"),
+        y=alt.Y("TSNE-y:Q", scale=alt.Scale(domain=(-90, 90)), title="t-SNE y"),
+        color=alt.Color(
             "RelativeGrowthRate:Q",
-            title="Avg. Year-to-Year Growth",
-            format=".2%",
+            scale=color_scale,
+            title="Avg Year to Year Growth (% per year)",
+            legend=alt.Legend(
+                orient="right",
+                format=".0%"
+            ),
         ),
-        alt.Tooltip("Year:Q", title="Year"),
-    ],
-).properties(
-    width=1000,
-    height=1000,
+        opacity=alt.condition(
+            topic_selection,
+            alt.value(1.0),
+            alt.value(0.1),
+        ),
+        tooltip=[
+            alt.Tooltip("AbstractTitle:N", title="Abstract Title"),
+            alt.Tooltip("TopicName:N", title="Topic Name"),
+            alt.Tooltip(
+                "RelativeGrowthRate:Q",
+                title="Avg. Year-to-Year Growth",
+                format=".2%",
+            ),
+            alt.Tooltip("Year:Q", title="Year"),
+        ],
+    )
+    .add_params(topic_selection)
+    .properties(width=1000, height=1000)
 )
 
 # -----------------------------
-# Attach selection to chart
-# -----------------------------
-main_chart = main_chart.add_params(topic_selection)
-
-# -----------------------------
-# Export Vega-Lite JSON
+# Export JSON
 # -----------------------------
 chart_json = main_chart.to_json()
 
 # -----------------------------
-# Inject into HTML template
+# Inject into HTML
 # -----------------------------
 with open("template.html", "r") as f:
     html_template = f.read()
